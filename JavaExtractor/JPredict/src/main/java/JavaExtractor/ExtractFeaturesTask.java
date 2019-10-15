@@ -14,7 +14,10 @@ import com.github.javaparser.ast.CompilationUnit;
 
 import JavaExtractor.Common.CommandLineValues;
 import JavaExtractor.Common.Common;
-import JavaExtractor.FeaturesEntities.ProgramFeatures;
+// import JavaExtractor.FeaturesEntities.ProgramFeatures;
+
+import org.apache.commons.io.FilenameUtils;
+
 
 public class ExtractFeaturesTask implements Callable<Void> {
 	CommandLineValues m_CommandLineValues;
@@ -34,24 +37,24 @@ public class ExtractFeaturesTask implements Callable<Void> {
 	}
 
 	public void processFile() {
-		ArrayList<ProgramFeatures> features;
+		// ArrayList<ProgramFeatures> features;
 		try {
-			features = extractSingleFile();
+			CompilationUnit cu = extractSingleFile();
 		} catch (ParseException | IOException e) {
 			e.printStackTrace();
 			return;
 		}
-		if (features == null) {
-			return;
-		}
+		// if (features == null) {
+		// 	return;
+		// }
 
-		String toPrint = featuresToString(features);
-		if (toPrint.length() > 0) {
-			System.out.println(toPrint);
-		}
+		// String toPrint = featuresToString(features);
+		// if (toPrint.length() > 0) {
+		// 	System.out.println(toPrint);
+		// }
 	}
 
-	public ArrayList<ProgramFeatures> extractSingleFile() throws ParseException, IOException {
+	CompilationUnit extractSingleFile() throws ParseException, IOException {
 		String code = null;
 		try {
 			code = new String(Files.readAllBytes(this.filePath));
@@ -61,32 +64,32 @@ public class ExtractFeaturesTask implements Callable<Void> {
 		}
 		FeatureExtractor featureExtractor = new FeatureExtractor(m_CommandLineValues);
 
-		ArrayList<ProgramFeatures> features = featureExtractor.extractFeatures(code);
+		CompilationUnit cu = featureExtractor.extractFeatures(code, FilenameUtils.getBaseName(this.filePath.toString()));
 
-		return features;
+		return cu;
 	}
 
-	public String featuresToString(ArrayList<ProgramFeatures> features) {
-		if (features == null || features.isEmpty()) {
-			return Common.EmptyString;
-		}
+	// public String featuresToString(ArrayList<ProgramFeatures> features) {
+	// 	if (features == null || features.isEmpty()) {
+	// 		return Common.EmptyString;
+	// 	}
 
-		List<String> methodsOutputs = new ArrayList<>();
+	// 	List<String> methodsOutputs = new ArrayList<>();
 
-		for (ProgramFeatures singleMethodfeatures : features) {
-			StringBuilder builder = new StringBuilder();
-			
-			String toPrint = Common.EmptyString;
-			toPrint = singleMethodfeatures.toString();
-			if (m_CommandLineValues.PrettyPrint) {
-				toPrint = toPrint.replace(" ", "\n\t");
-			}
-			builder.append(toPrint);
-			
+	// 	for (ProgramFeatures singleMethodfeatures : features) {
+	// 		StringBuilder builder = new StringBuilder();
 
-			methodsOutputs.add(builder.toString());
+	// 		String toPrint = Common.EmptyString;
+	// 		toPrint = singleMethodfeatures.toString();
+	// 		if (m_CommandLineValues.PrettyPrint) {
+	// 			toPrint = toPrint.replace(" ", "\n\t");
+	// 		}
+	// 		builder.append(toPrint);
 
-		}
-		return StringUtils.join(methodsOutputs, "\n");
-	}
+
+	// 		methodsOutputs.add(builder.toString());
+
+	// 	}
+	// 	return StringUtils.join(methodsOutputs, "\n");
+	// }
 }

@@ -34,6 +34,7 @@ def ExtractFeaturesForDir(args, dir, prefix):
     kill = lambda process: process.kill()
     outputFileName = TMP_DIR + prefix + dir.split('/')[-1]
     failed = False
+    print(command)
     with open(outputFileName, 'a') as outputFile:
         sleeper = subprocess.Popen(command, stdout=outputFile, stderr=subprocess.PIPE)
         timer = Timer(600000, kill, [sleeper])
@@ -65,7 +66,7 @@ def ExtractFeaturesForDirsList(args, dirs):
         shutil.rmtree(TMP_DIR, ignore_errors=True)
     os.makedirs(TMP_DIR)
     try:
-        p = multiprocessing.Pool(4)
+        p = multiprocessing.Pool(1)
         p.starmap(ParallelExtractDir, zip(itertools.repeat(args), dirs))
         #for dir in dirs:
         #    ExtractFeaturesForDir(args, dir, '')
@@ -77,6 +78,7 @@ def ExtractFeaturesForDirsList(args, dirs):
 
 
 if __name__ == '__main__':
+    print('here')
     parser = ArgumentParser()
     parser.add_argument("-maxlen", "--max_path_length", dest="max_path_length", required=False, default=8)
     parser.add_argument("-maxwidth", "--max_path_width", dest="max_path_width", required=False, default=2)
@@ -91,6 +93,7 @@ if __name__ == '__main__':
                   str(args.max_path_length) + ' --max_path_width ' + str(args.max_path_width) + ' --file ' + args.file
         os.system(command)
     elif args.dir is not None:
+        print('HERERERE')
         subdirs = get_immediate_subdirectories(args.dir)
         to_extract = subdirs
         if len(subdirs) == 0:

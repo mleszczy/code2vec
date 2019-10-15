@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import org.kohsuke.args4j.CmdLineException;
 
 import JavaExtractor.Common.CommandLineValues;
-import JavaExtractor.FeaturesEntities.ProgramRelation;
+// import JavaExtractor.FeaturesEntities.ProgramRelation;
 
 public class App {
 	private static CommandLineValues s_CommandLineValues;
@@ -23,9 +23,9 @@ public class App {
 			return;
 		}
 
-		if (s_CommandLineValues.NoHash) {
-			ProgramRelation.setNoHash();
-		}
+		// if (s_CommandLineValues.NoHash) {
+		// 	ProgramRelation.setNoHash();
+		// }
 
 		if (s_CommandLineValues.File != null) {
 			ExtractFeaturesTask extractFeaturesTask = new ExtractFeaturesTask(s_CommandLineValues,
